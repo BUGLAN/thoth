@@ -1,8 +1,7 @@
 package crawler
 
 import (
-	"fmt"
-
+	"github.com/axgle/mahonia"
 	"github.com/gocolly/colly/v2"
 )
 
@@ -23,19 +22,18 @@ func NewCssSelectorRule(rule *Rule) *CssCrawler {
 	return &CssCrawler{Rule: rule, Collector: colly.NewCollector()}
 }
 
-type Callback func(s string) error
+type Callback func(html string, text string) error
 
 // Crawler 通过rule开始去爬数据
 func (css *CssCrawler) Crawler(callbacks ...Callback) *CssCrawler {
 	css.Collector.OnHTML(css.Rule.Selector, func(element *colly.HTMLElement) {
-		fmt.Println("-----------------------------")
 		s, err := element.DOM.Html()
 		if err != nil {
 			css.Error = err
 		}
-		fmt.Println(s)
+
 		for _, v := range callbacks {
-			err := v(s)
+			err := v(s, element.Text)
 			if err != nil {
 				css.Error = err
 				return
@@ -47,9 +45,11 @@ func (css *CssCrawler) Crawler(callbacks ...Callback) *CssCrawler {
 	return css
 }
 
-// 假想api
-
-// engine := crawler.New()
-// engine.SetupRule(&Rule)
-// engine.Start()
-//
+func (*CssCrawler) ConvertToString(src string, srcCode string, tagCode string) string {
+	srcCoder := mahonia.NewDecoder(srcCode)
+	srcResult := srcCoder.ConvertString(src)
+	tagCoder := mahonia.NewDecoder(tagCode)
+	_, cdata, _ := tagCoder.Translate([]byte(srcResult), true)
+	result := string(cdata)
+	return result
+}

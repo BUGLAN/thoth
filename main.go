@@ -9,6 +9,9 @@ import (
 	"os/signal"
 
 	"github.com/gofiber/fiber"
+
+	"github.com/BUGLAN/thoth/internal/thoth"
+	"github.com/BUGLAN/thoth/wire"
 )
 
 func App(f func()) {
@@ -23,11 +26,14 @@ func App(f func()) {
 
 func main() {
 	app := fiber.New()
-	app.Get("/", func(c *fiber.Ctx) {
-		c.Send("Hello, World!")
-	})
 
 	App(func() {
+		thothController, err := wire.InitThothController()
+		if err != nil {
+			panic(err)
+		}
+
+		thoth.Route(app, thothController)
 		log.Fatal(app.Listen(8080))
 	})
 }

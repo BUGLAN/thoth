@@ -3,8 +3,8 @@ package crawler
 func ExampleCssSelectorRule_Crawler() {
 
 	crawler := NewCssSelectorRule(&Rule{
-		Target:   "http://www.shuquge.com/txt/107034/31841459.html",
-		Selector: "#content",
+		Target:   "https://gist.github.com/BUGLAN/0187c5cda0e99dcd2824a0e3b1599ee4",
+		Selector: "file-box",
 	})
 	crawler.Crawler()
 	// OutPut:

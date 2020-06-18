@@ -43,6 +43,14 @@ func (css *CssCrawler) Crawler(callbacks ...Callback) *CssCrawler {
 		}
 	})
 
+	css.Collector.OnResponse(func(response *colly.Response) {
+		fmt.Println(response.StatusCode)
+	})
+
+	css.Collector.OnError(func(response *colly.Response, err error) {
+		fmt.Println(err)
+	})
+
 	css.Error = css.Collector.Visit(css.Rule.Target)
 	return css
 }

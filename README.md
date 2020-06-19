@@ -50,3 +50,14 @@
   "selector": "article"
 }
 ```
+
+## 存储定义
+
+```json
+{
+  "origin_url": "https://m.38kanshu.cc/191854/mulu.html",
+  "book": "总有人打扰我的挂机生活",
+  "name": "第1章. 我是一个只喜欢兽耳娘的咸鱼挂哔", 
+  "chapters": ["https://m.38kanshu.cc/191854/79113644.html", "https://m.38kanshu.cc/191854/79113644.html"]
+}
+```

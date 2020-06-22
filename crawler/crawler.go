@@ -1,6 +1,8 @@
 package crawler
 
 import (
+	"fmt"
+
 	"github.com/axgle/mahonia"
 	"github.com/gocolly/colly/v2"
 )
@@ -41,9 +43,9 @@ func (css *CssCrawler) Crawler(callbacks ...Callback) *CssCrawler {
 		}
 	})
 
-	css.Collector.OnResponse(func(response *colly.Response) {
-		fmt.Println(response.StatusCode)
-	})
+	// css.Collector.OnResponse(func(response *colly.Response) {
+	//
+	// })
 
 	css.Collector.OnError(func(response *colly.Response, err error) {
 		fmt.Println(err)
@@ -53,6 +55,7 @@ func (css *CssCrawler) Crawler(callbacks ...Callback) *CssCrawler {
 	return css
 }
 
+// ConvertToString 编码转换
 func (*CssCrawler) ConvertToString(src string, srcCode string, tagCode string) string {
 	srcCoder := mahonia.NewDecoder(srcCode)
 	srcResult := srcCoder.ConvertString(src)

@@ -7,15 +7,17 @@ package wire
 
 import (
 	"github.com/BUGLAN/thoth/dao"
+	"github.com/BUGLAN/thoth/internal/pkg/es"
 	"github.com/BUGLAN/thoth/internal/pkg/mongo"
 	"github.com/BUGLAN/thoth/internal/thoth"
 	"github.com/globalsign/mgo"
+	"github.com/olivere/elastic/v7"
 )
 
 // Injectors from wire.go:
 
 func InitBookDao() (dao.BookDao, error) {
-	database, err := InitMongoConfig()
+	database, err := InitMongo()
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +36,7 @@ func InitThothController() (*thoth.Controller, error) {
 
 // wire.go:
 
-func InitMongoConfig() (*mgo.Database, error) {
+func InitMongo() (*mgo.Database, error) {
 	return mongo.Init(&mongo.Config{
 		Username:   "root",
 		Password:   "root",
@@ -44,4 +46,8 @@ func InitMongoConfig() (*mgo.Database, error) {
 		PoolLimit:  20,
 	})
 
+}
+
+func InitEs() (*elastic.Client, error) {
+	return es.Init(&es.Config{ServerURLs: []string{"http://127.0.0.1:9200"}})
 }

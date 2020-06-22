@@ -30,4 +30,3 @@ func ExampleCssSelectorRule_Crawler1() {
 	// OutPut:
 }
 
-// ConvertToString 编码转换

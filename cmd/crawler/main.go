@@ -33,7 +33,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	if err = cssCrawler.Crawler(process.KanShuProcess).Error; err != nil {
+	if err = cssCrawler.Crawler(process.GithubReadMeProcess).Error; err != nil {
 		panic(err)
 	}
 }

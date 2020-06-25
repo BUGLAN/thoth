@@ -38,7 +38,7 @@ func InitThothController() (*thoth.Controller, error) {
 	panic(wire.Build(InitBookDao, thoth.NewThothController))
 }
 
-func InitKanShuProcess() ( *process.KanShu, error) {
+func InitKanShuProcess() (*process.KanShu, error) {
 	panic(wire.Build(InitBookDao, process.NewKanShu))
 
 }

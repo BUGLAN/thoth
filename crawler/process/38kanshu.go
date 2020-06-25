@@ -12,11 +12,15 @@ import (
 )
 
 type KanShu struct {
-	book dao.BookDao
+	book    dao.BookDao
+	article dao.ArticleDao
 }
 
-func NewKanShu(book dao.BookDao) *KanShu {
-	return &KanShu{book: book}
+func NewKanShu(book dao.BookDao, article dao.ArticleDao) *KanShu {
+	return &KanShu{
+		book:    book,
+		article: article,
+	}
 }
 
 // KanShuProcess 处理器
@@ -30,7 +34,7 @@ func (process *KanShu) KanShuProcess(html string, text string) error {
 		fmt.Println(stringList[1], stringList[2])
 	}
 	// save
-	// process.book.FirstOrCreate()
+	// process.book.Create()
 
 	return nil
 }

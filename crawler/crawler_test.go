@@ -23,10 +23,9 @@ func ExampleCssSelectorRule_Crawler1() {
 		Selector: ".chapter li",
 	})
 	crawler.Crawler(func(html string, text string) error {
-		s := crawler.ConvertToString(html, "gbk", "utf-8")
+		s := ConvertToString(html, "gbk", "utf-8")
 		fmt.Println(s)
 		return nil
 	})
 	// OutPut:
 }
-

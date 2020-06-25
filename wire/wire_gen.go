@@ -6,6 +6,7 @@
 package wire
 
 import (
+	"github.com/BUGLAN/thoth/crawler/process"
 	"github.com/BUGLAN/thoth/dao"
 	"github.com/BUGLAN/thoth/internal/pkg/es"
 	"github.com/BUGLAN/thoth/internal/pkg/mongo"
@@ -32,6 +33,15 @@ func InitThothController() (*thoth.Controller, error) {
 	}
 	controller := thoth.NewThothController(bookDao)
 	return controller, nil
+}
+
+func InitKanShuProcess() (*process.KanShu, error) {
+	bookDao, err := InitBookDao()
+	if err != nil {
+		return nil, err
+	}
+	kanShu := process.NewKanShu(bookDao)
+	return kanShu, nil
 }
 
 // wire.go:

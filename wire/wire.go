@@ -7,6 +7,7 @@ import (
 	"github.com/google/wire"
 	"github.com/olivere/elastic/v7"
 
+	"github.com/BUGLAN/thoth/crawler/process"
 	"github.com/BUGLAN/thoth/dao"
 	"github.com/BUGLAN/thoth/internal/pkg/es"
 	"github.com/BUGLAN/thoth/internal/pkg/mongo"
@@ -35,4 +36,9 @@ func InitBookDao() (dao.BookDao, error) {
 
 func InitThothController() (*thoth.Controller, error) {
 	panic(wire.Build(InitBookDao, thoth.NewThothController))
+}
+
+func InitKanShuProcess() ( *process.KanShu, error) {
+	panic(wire.Build(InitBookDao, process.NewKanShu))
+
 }

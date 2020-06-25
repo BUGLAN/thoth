@@ -24,17 +24,17 @@ func NewCssSelectorRule(rule *Rule) *CssCrawler {
 	return &CssCrawler{Rule: rule, Collector: colly.NewCollector()}
 }
 
-type Callback func(html string, text string) error
+type Process func(html string, text string) error
 
 // Crawler 通过rule开始去爬数据
-func (css *CssCrawler) Crawler(callbacks ...Callback) *CssCrawler {
+func (css *CssCrawler) Crawler(processes ...Process) *CssCrawler {
 	css.Collector.OnHTML(css.Rule.Selector, func(element *colly.HTMLElement) {
 		s, err := element.DOM.Html()
 		if err != nil {
 			css.Error = err
 		}
 
-		for _, v := range callbacks {
+		for _, v := range processes {
 			err := v(s, element.Text)
 			if err != nil {
 				css.Error = err
@@ -56,7 +56,7 @@ func (css *CssCrawler) Crawler(callbacks ...Callback) *CssCrawler {
 }
 
 // ConvertToString 编码转换
-func (*CssCrawler) ConvertToString(src string, srcCode string, tagCode string) string {
+func ConvertToString(src string, srcCode string, tagCode string) string {
 	srcCoder := mahonia.NewDecoder(srcCode)
 	srcResult := srcCoder.ConvertString(src)
 	tagCoder := mahonia.NewDecoder(tagCode)

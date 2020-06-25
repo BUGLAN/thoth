@@ -47,3 +47,8 @@ func (dao *Book) FirstOrCreate(book *model.Book) (record *model.Book, err error)
 	}
 	return book, nil
 }
+
+// Chapters save chapters
+func (dao *Book) Chapters() {
+
+}

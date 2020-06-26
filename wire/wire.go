@@ -11,10 +11,10 @@ import (
 	"github.com/BUGLAN/thoth/dao"
 	"github.com/BUGLAN/thoth/internal/pkg/es"
 	"github.com/BUGLAN/thoth/internal/pkg/mongo"
-	"github.com/BUGLAN/thoth/internal/thoth"
+	"github.com/BUGLAN/thoth/internal/thoth/service"
 )
 
-func InitMongo() (*mgo.Database, error) {
+func InitMongo() *mgo.Database {
 	return mongo.Init(&mongo.Config{
 		Username:   "root",
 		Password:   "root",
@@ -26,19 +26,28 @@ func InitMongo() (*mgo.Database, error) {
 
 }
 
-func InitEs() (*elastic.Client, error) {
+func InitEs() *elastic.Client {
 	return es.Init(&es.Config{ServerURLs: []string{"http://127.0.0.1:9200"}})
 }
 
-func InitBookDao() (dao.BookDao, error) {
+func InitBookDao() dao.BookDao {
 	panic(wire.Build(InitMongo, dao.NewBook))
 }
 
-func InitThothController() (*thoth.Controller, error) {
-	panic(wire.Build(InitBookDao, thoth.NewThothController))
+func InitArticleDao() dao.ArticleDao {
+	panic(wire.Build(InitEs, dao.NewArticle))
 }
 
-func InitKanShuProcess() (*process.KanShu, error) {
-	panic(wire.Build(InitBookDao, process.NewKanShu))
+func InitArticleService() (article service.ArticleService) {
+	panic(wire.Build(InitEs, dao.NewArticle, service.NewArticleService))
+
+}
+
+// func InitThothController() (*thoth.Controller, error) {
+// 	panic(wire.Build(InitBookDao, thoth.NewThothController))
+// }
+//
+func InitKanShuProcess() *process.KanShu {
+	panic(wire.Build(InitBookDao, InitArticleDao, process.NewKanShu))
 
 }

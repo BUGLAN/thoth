@@ -34,16 +34,16 @@ func (config *Config) GetDsn() string {
 	return fmt.Sprintf("mongodb://%s/%s?%s", config.ServerList, config.Database, url.QueryEscape(config.Option))
 }
 
-func Init(config *Config) (db *mgo.Database, err error) {
+func Init(config *Config) (db *mgo.Database) {
 	session, err := mgo.Dial(config.GetDsn())
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 
 	session.SetPoolLimit(config.PoolLimit)
 	db = session.DB(config.Database)
 	if err = db.Session.Ping(); err != nil {
-		return nil, err
+		panic(err)
 	}
-	return db, nil
+	return db
 }

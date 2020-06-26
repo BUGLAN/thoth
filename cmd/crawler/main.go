@@ -11,7 +11,6 @@ import (
 var (
 	url      string
 	selector string
-	err      error
 )
 
 func init() {
@@ -29,7 +28,7 @@ func main() {
 		Target:   url,
 		Selector: selector,
 	})
-	process, err := wire.InitKanShuProcess()
+	process := wire.InitKanShuProcess()
 	if err != nil {
 		panic(err)
 	}

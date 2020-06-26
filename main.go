@@ -9,8 +9,9 @@ import (
 	"os/signal"
 
 	"github.com/gofiber/fiber"
+	"github.com/gofiber/template/html"
 
-	"github.com/BUGLAN/thoth/internal/thoth"
+	"github.com/BUGLAN/thoth/internal/thoth/controller"
 	"github.com/BUGLAN/thoth/wire"
 )
 
@@ -25,15 +26,15 @@ func App(f func()) {
 }
 
 func main() {
-	app := fiber.New()
+	views := html.New("./web/template", ".html")
+	views.Reload(true)
+	// views.Delims("{{", "}}")
+	app := fiber.New(&fiber.Settings{Views: views})
 
 	App(func() {
-		thothController, err := wire.InitThothController()
-		if err != nil {
-			panic(err)
-		}
+		service := wire.InitArticleService()
+		controller.NewThothController(views, app, service)
 
-		thoth.Route(app, thothController)
 		log.Fatal(app.Listen(8080))
 	})
 }

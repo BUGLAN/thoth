@@ -10,43 +10,42 @@ import (
 	"github.com/BUGLAN/thoth/dao"
 	"github.com/BUGLAN/thoth/internal/pkg/es"
 	"github.com/BUGLAN/thoth/internal/pkg/mongo"
-	"github.com/BUGLAN/thoth/internal/thoth"
+	"github.com/BUGLAN/thoth/internal/thoth/service"
 	"github.com/globalsign/mgo"
 	"github.com/olivere/elastic/v7"
 )
 
 // Injectors from wire.go:
 
-func InitBookDao() (dao.BookDao, error) {
-	database, err := InitMongo()
-	if err != nil {
-		return nil, err
-	}
+func InitBookDao() dao.BookDao {
+	database := InitMongo()
 	bookDao := dao.NewBook(database)
-	return bookDao, nil
+	return bookDao
 }
 
-func InitThothController() (*thoth.Controller, error) {
-	bookDao, err := InitBookDao()
-	if err != nil {
-		return nil, err
-	}
-	controller := thoth.NewThothController(bookDao)
-	return controller, nil
+func InitArticleDao() dao.ArticleDao {
+	client := InitEs()
+	articleDao := dao.NewArticle(client)
+	return articleDao
 }
 
-func InitKanShuProcess() (*process.KanShu, error) {
-	bookDao, err := InitBookDao()
-	if err != nil {
-		return nil, err
-	}
-	kanShu := process.NewKanShu(bookDao)
-	return kanShu, nil
+func InitArticleService() service.ArticleService {
+	client := InitEs()
+	articleDao := dao.NewArticle(client)
+	articleService := service.NewArticleService(articleDao)
+	return articleService
+}
+
+func InitKanShuProcess() *process.KanShu {
+	bookDao := InitBookDao()
+	articleDao := InitArticleDao()
+	kanShu := process.NewKanShu(bookDao, articleDao)
+	return kanShu
 }
 
 // wire.go:
 
-func InitMongo() (*mgo.Database, error) {
+func InitMongo() *mgo.Database {
 	return mongo.Init(&mongo.Config{
 		Username:   "root",
 		Password:   "root",
@@ -58,6 +57,6 @@ func InitMongo() (*mgo.Database, error) {
 
 }
 
-func InitEs() (*elastic.Client, error) {
+func InitEs() *elastic.Client {
 	return es.Init(&es.Config{ServerURLs: []string{"http://127.0.0.1:9200"}})
 }

@@ -11,6 +11,7 @@ import (
 var (
 	url      string
 	selector string
+	err error
 )
 
 func init() {

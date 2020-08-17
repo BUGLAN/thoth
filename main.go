@@ -4,6 +4,7 @@ web应用的入口
 package main
 
 import (
+	"github.com/gofiber/fiber/middleware"
 	"log"
 	"os"
 	"os/signal"
@@ -30,6 +31,7 @@ func main() {
 	views.Reload(true)
 	// views.Delims("{{", "}}")
 	app := fiber.New(&fiber.Settings{Views: views})
+	app.Use(middleware.Recover())
 
 	App(func() {
 		service := wire.InitArticleService()
